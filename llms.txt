@@ -1,0 +1,26 @@
+# qorechain-pq-light-client
+
+> Specification (draft) and reference verifiers in Go, Rust and TypeScript for a post-quantum light client of QoreChain: validators sign epoch checkpoints with a separate ML-DSA-87 (FIPS 204) checkpoint key; a light client follows the checkpoint chain and accepts a checkpoint signed by more than 2/3 of the power of the set named by its last trusted checkpoint. Apache-2.0.
+
+Status: requires chain support (not scheduled). QoreChain does not produce these checkpoints; validator consensus keys are ed25519 and IBC uses the standard 07 client. The verifiers are reference only, tested against simulated chains. fetchCheckpoint exists as an interface only and fails with REQUIRES_CHAIN_SUPPORT. No route or bridge is claimed to be post-quantum.
+
+Format: sign_bytes = "qorechain-pqlc-checkpoint-v1|" || checkpoint encoding (version 0x01, chain id, epoch, height, time, header hash, app hash, validator set hash, next validator set hash; big-endian). Validator set hash = SHAKE-256("qorechain-pqlc-valset-v1|" || set encoding, 32). ML-DSA-87 public key 2592 bytes, signature 4627 bytes, at most 256 validators.
+
+## Docs
+- [README](README.md): status table, packages
+- [Specification v1 (draft)](spec/pq-light-client-v1.md): encodings, verification order, error codes, misbehaviour, chain requirements, sizes, IBC mapping, EVM and Solana verifier designs
+- [When can a route be called post-quantum](docs/position-post-quantum-routes.md)
+- [Guide for relayer developers (Rust)](docs/guides/relayer-rust.md)
+- [Test vectors](vectors/README.md)
+
+## API (same in all three languages)
+- Types: Checkpoint, ValidatorSet, Validator, CheckpointSignature, SignedCheckpoint, TrustedState, Misbehaviour
+- encodeCheckpointSignBytes, encodeCheckpoint, encodeValidatorSet, encodeSignedCheckpoint, decodeCheckpoint, decodeValidatorSet, decodeSignedCheckpoint, hashValidatorSet
+- newTrustedState, verifyCheckpoint(trusted, signed, now) -> new TrustedState or error, detectMisbehaviour(set, a, b) -> evidence or none, signCheckpoint (simulators and tests)
+- CheckpointSource, fetchCheckpoint (requires chain support, not scheduled)
+- Error codes: MALFORMED, CHAIN_ID_MISMATCH, TRUST_EXPIRED, FUTURE_CHECKPOINT, NOT_NEWER, SET_MISMATCH, UNKNOWN_VALIDATOR, BAD_SIGNATURE, INSUFFICIENT_POWER, CONFLICTING_CHECKPOINT, REQUIRES_CHAIN_SUPPORT
+
+## Packages
+- Go: github.com/qorechain/qorechain-pq-light-client/go (package pqlightclient), over github.com/qorechain/qorechain-pqc/go v0.2.3
+- Rust: crate qorechain-pq-light-client (snake_case names), over qorechain-pqc 0.2.3
+- TypeScript: @qorechain/pq-light-client (64-bit fields as bigint), over @qorechain/pqc 0.2.3

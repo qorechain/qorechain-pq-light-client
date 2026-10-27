@@ -1,0 +1,29 @@
+qorechain-pq-light-client
+Copyright 2026 QoreChain Association
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It depends on the following third-party software, each under its own license.
+Nothing below is redistributed in this repository.
+
+Go module (go)
+  github.com/qorechain/qorechain-pqc/go   Apache-2.0    QoreChain Association
+  github.com/cloudflare/circl             BSD-3-Clause  (via qorechain-pqc)
+  golang.org/x/crypto, golang.org/x/sys   BSD-3-Clause  (via qorechain-pqc)
+
+Rust crate (rust)
+  qorechain-pqc                           Apache-2.0    QoreChain Association
+  fips204, fips203, sha3 and their RustCrypto dependencies
+                                          MIT OR Apache-2.0 (via qorechain-pqc)
+  subtle                                  BSD-3-Clause  (via fips204)
+  zeroize_derive build dependencies (proc-macro2, quote, syn)
+                                          MIT OR Apache-2.0; unicode-ident
+                                          (MIT OR Apache-2.0) AND Unicode-3.0
+  (development: serde_json MIT OR Apache-2.0, memchr Unlicense OR MIT, used under MIT)
+
+TypeScript package (ts)
+  @qorechain/pqc                          Apache-2.0    QoreChain Association
+  @noble/post-quantum                     MIT           Paul Miller (via @qorechain/pqc)
+  @noble/hashes                           MIT           Paul Miller (via @qorechain/pqc)
+  (development: typescript Apache-2.0, tsup MIT, vitest MIT, @types/node MIT,
+   and their dependencies under MIT, ISC, Apache-2.0 or BSD-3-Clause)
