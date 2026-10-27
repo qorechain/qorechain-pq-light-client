@@ -1,0 +1,31 @@
+name: Bug report
+description: Something does not work as specified
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not report security vulnerabilities here; see SECURITY.md."
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      options: [Go, Rust, TypeScript, Specification or vectors]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: A minimal snippet, or the bytes of the checkpoint that fails (hex).
