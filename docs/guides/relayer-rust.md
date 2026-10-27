@@ -7,11 +7,8 @@ How a relayer would carry QoreChain post-quantum checkpoints, with the `qorechai
 
 ## Add the crate
 
-The crate is not on crates.io yet; use the repository:
-
-```toml
-[dependencies]
-qorechain-pq-light-client = { git = "https://github.com/qorechain/qorechain-pq-light-client" }
+```sh
+cargo add qorechain-pq-light-client
 ```
 
 It depends only on `qorechain-pqc` 0.2.3 (ML-DSA-87 and SHAKE-256), uses no `unsafe` code and does no I/O.

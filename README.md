@@ -34,7 +34,7 @@ Proposed signing domain, to be reserved: `qorechain-pqlc-checkpoint-v1|` (and `q
 | Rust | `qorechain-pq-light-client` | [rust](rust/README.md) |
 | TypeScript | `@qorechain/pq-light-client` | [ts](ts/README.md) |
 
-All three are built over the `qorechain-pqc` bindings 0.2.3 and expose the same API: `Checkpoint`, `ValidatorSet`, `SignedCheckpoint`, `TrustedState`, `encodeCheckpointSignBytes`, `verifyCheckpoint`, `detectMisbehaviour`, the encoders and decoders, and typed errors with stable codes (`INSUFFICIENT_POWER`, `BAD_SIGNATURE`, `UNKNOWN_VALIDATOR`, `SET_MISMATCH`, `TRUST_EXPIRED`, `CONFLICTING_CHECKPOINT`, ...). None of them is published yet.
+All three are built over the `qorechain-pqc` bindings 0.2.3 and expose the same API: `Checkpoint`, `ValidatorSet`, `SignedCheckpoint`, `TrustedState`, `encodeCheckpointSignBytes`, `verifyCheckpoint`, `detectMisbehaviour`, the encoders and decoders, and typed errors with stable codes (`INSUFFICIENT_POWER`, `BAD_SIGNATURE`, `UNKNOWN_VALIDATOR`, `SET_MISMATCH`, `TRUST_EXPIRED`, `CONFLICTING_CHECKPOINT`, ...). Install: `npm install @qorechain/pq-light-client`, `cargo add qorechain-pq-light-client`, `go get github.com/qorechain/qorechain-pq-light-client/go`.
 
 ```ts
 import { decodeSignedCheckpoint, verifyCheckpoint } from "@qorechain/pq-light-client";
