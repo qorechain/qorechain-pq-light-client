@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: Apache-2.0
+[package]
+name = "qorechain-pq-light-client"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+authors = ["QoreChain Association"]
+repository = "https://github.com/qorechain/qorechain-pq-light-client"
+homepage = "https://github.com/qorechain/qorechain-pq-light-client"
+documentation = "https://docs.rs/qorechain-pq-light-client"
+description = "Reference verifier for QoreChain post-quantum light client checkpoints (ML-DSA-87, FIPS 204). Specification draft; requires chain support (not scheduled)."
+readme = "README.md"
+keywords = ["qorechain", "light-client", "ml-dsa", "fips-204", "checkpoint"]
+categories = ["cryptography"]
+# The vector tests and the example read ../vectors at run time, outside the crate.
+exclude = ["tests/vectors.rs", "examples/relayer.rs"]
+
+[lib]
+name = "qorechain_pq_light_client"
+path = "src/lib.rs"
+
+[dependencies]
+qorechain-pqc = "=0.2.3"
+
+[dev-dependencies]
+serde_json = "=1.0.154"
