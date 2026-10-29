@@ -43,6 +43,66 @@ import { decodeSignedCheckpoint, verifyCheckpoint } from "@qorechain/pq-light-cl
 const next = verifyCheckpoint(trusted, decodeSignedCheckpoint(bytes), BigInt(Math.floor(Date.now() / 1000)));
 ```
 
+## Quick start
+
+Offline: follow the simulated 21-validator checkpoint chain from the shared vectors (with a validator set rotation at epoch 2). The vector keys are public test keys; nothing touches a QoreChain network.
+
+```bash
+mkdir pqlc && cd pqlc && npm init -y && npm pkg set type=module
+npm install @qorechain/pq-light-client
+curl -sLO https://raw.githubusercontent.com/qorechain/qorechain-pq-light-client/v0.1.0/vectors/pq-light-client-v1.json
+```
+
+```js
+// follow.mjs: a TypeScript port of the repository's Rust relayer example.
+import { readFileSync } from "node:fs";
+import {
+  PqLightClientError,
+  decodeSignedCheckpoint,
+  decodeValidatorSet,
+  fetchCheckpoint,
+  newTrustedState,
+  verifyCheckpoint,
+} from "@qorechain/pq-light-client";
+
+const v = JSON.parse(readFileSync("pq-light-client-v1.json", "utf8"));
+const hex = (s) => Uint8Array.from(Buffer.from(s, "hex"));
+
+const root = decodeSignedCheckpoint(hex(v.signedCheckpoints["c21-e0-root"].encoded));
+const set = decodeValidatorSet(hex(v.validatorSets.C21.encoded));
+let state = newTrustedState({
+  checkpoint: root.checkpoint,
+  signatures: root.signatures,
+  validatorSet: set,
+  nextValidatorSet: set,
+  trustingPeriod: 1_209_600n, // 14 days
+  maxClockDrift: 10n,
+});
+
+for (const id of ["c21-e1", "c21-e2-rotate", "c21-e3"]) {
+  const signed = decodeSignedCheckpoint(hex(v.signedCheckpoints[id].encoded));
+  state = verifyCheckpoint(state, signed, signed.checkpoint.time + 5n);
+  console.log(`trusted epoch ${state.checkpoint.epoch} at height ${state.checkpoint.height}`);
+}
+
+try {
+  await fetchCheckpoint("https://rpc.example.invalid", state.checkpoint.chainId, 4n);
+} catch (e) {
+  if (e instanceof PqLightClientError) console.log("live source:", e.code);
+}
+```
+
+`node follow.mjs` prints:
+
+```
+trusted epoch 1 at height 11000
+trusted epoch 2 at height 12000
+trusted epoch 3 at height 13000
+live source: REQUIRES_CHAIN_SUPPORT
+```
+
+The same flow in Rust: `cargo run --example relayer` in [rust](rust/README.md).
+
 ## Documents
 
 - [Specification v1 (draft)](spec/pq-light-client-v1.md)
